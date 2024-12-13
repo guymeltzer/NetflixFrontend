@@ -1,17 +1,23 @@
-# Use an official base image
-FROM python:3.9-slim
+# Use an official Node.js runtime as a base image
+FROM node:14.0.0
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY . .
+# Copy package.json and package-lock.json into the container
+COPY package*.json ./
 
 # Install dependencies
-RUN pip install -r requirements.txt
+RUN npm install
 
-# Expose the application port
-EXPOSE 5000
+# Copy the rest of the application code
+COPY . .
 
-# Run the application
-CMD ["python", "app.py"]
+# Build the app
+RUN npm run build
+
+# Expose port 3000 (or another port if specified in the README)
+EXPOSE 3000
+
+# Define the command to start the app
+CMD ["npm", "start"]
