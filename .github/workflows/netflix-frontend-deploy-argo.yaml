@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Docker Login
         run: |
-            echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+            echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
       - uses: actions/checkout@v3
       - name: Buid and push docker images
         run: |
