@@ -3,7 +3,7 @@ name: NetflixFrontend stack build-deploy
 on:
   push:
     branches:
-     - main
+      - main
 
 permissions:
   contents: write
@@ -15,9 +15,11 @@ jobs:
     steps:
       - name: Docker Login
         run: |
-            echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          echo "${{ secrets.DOCKER_HUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_HUB_USERNAME }}" --password-stdin
+
       - uses: actions/checkout@v3
-      - name: Buid and push docker images
+
+      - name: Build and push docker images
         run: |
           IMAGE_NAME=guymeltzer/nf:${{ github.run_number }}
           docker build -t $IMAGE_NAME .
@@ -26,17 +28,21 @@ jobs:
       - name: Checkout infrastructure repo
         uses: actions/checkout@v3
         with:
-          repository: https://github.com/guymeltzer/NetflixInfra  # TODO change me
-          token: ${{ secrets.REPO_TOKEN }}  # The GITHUB_TOKEN secret is a GitHub access token.
+          repository: guymeltzer/NetflixInfra  # Changed this line
+          token: ${{ secrets.REPO_TOKEN }}
           path: ./NetflixInfra
 
       - name: Update YAML manifests
         run: |
-           cd ./NetflixInfra
-           # TODO commit & push changes to infra repo
-           
+          cd ./NetflixInfra
+          sed -i "s|image: guymeltzer/nf:[0-9]*|image: guymeltzer/nf:${{ github.run_number }}|g" ./k8s/NetflixFrontend/deployment.yaml
+          sed -i "s|image: guymeltzer/nf:[0-9]*|image: guymeltzer/nf:${{ github.run_number }}|g" ./k8s/NetflixMovieCatalog/deployment.yaml
 
       - name: Commit and Push changes
         run: |
-           cd ./NetflixInfra
-           # TODO commit & push changes to infra repo
+          cd ./NetflixInfra
+          git config --global user.name "Your Github Bot"
+          git config --global user.email "yourbot@example.com"
+          git add .
+          git commit -m "Update image tag to ${{ github.run_number }}"
+          git push origin main
