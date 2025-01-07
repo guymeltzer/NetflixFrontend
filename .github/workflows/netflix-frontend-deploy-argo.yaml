@@ -26,7 +26,7 @@ jobs:
       - name: Checkout infrastructure repo
         uses: actions/checkout@v3
         with:
-          repository: https://github.com/guymeltzer/NetflixInfra  # TODO change me
+          repository: guymeltzer/NetflixInfra  # TODO change me
           token: ${{ secrets.REPO_TOKEN }}  # The GITHUB_TOKEN secret is a GitHub access token.
           path: ./NetflixInfra
 
