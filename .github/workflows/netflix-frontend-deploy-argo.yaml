@@ -20,8 +20,8 @@ jobs:
       - name: Buid and push docker images
         run: |
           IMAGE_NAME=guymeltzer/nf:${{ github.run_number }}
-          docker build -t $IMAGE_NAME .
-          docker push $IMAGE_NAME
+        #docker build -t $IMAGE_NAME .
+        # docker push $IMAGE_NAME
 
       - name: Checkout infrastructure repo
         uses: actions/checkout@v3

@@ -46,7 +46,7 @@ jobs:
             
             # Update the image tag in the deployment YAML
             sed -i "s|image: .*|image: $IMAGE_NAME:$SHORT_COMMIT_ID|g" $FRONTEND_DEPLOYMENT_FILE
-
+#
       - name: Commit and Push changes
         run: |
           cd ./NetflixInfra
