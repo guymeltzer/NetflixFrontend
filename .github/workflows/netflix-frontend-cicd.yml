@@ -22,7 +22,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and Push Docker Image
-      - run: |
+        run: |
           IMAGE_NAME=guymeltzer/nf
           COMMIT_ID=${{ github.sha }}
           SHORT_COMMIT_ID=${COMMIT_ID:0:7}
@@ -38,14 +38,14 @@ jobs:
 
       - name: Update Kubernetes Manifests
         run: |
-            cd ./NetflixInfra
-            FRONTEND_DEPLOYMENT_FILE=k8s/NetflixFrontend/netflix-frontend-deploy.yaml
-            IMAGE_NAME=guymeltzer/nf
-            COMMIT_ID=${{ github.sha }}
-            SHORT_COMMIT_ID=${COMMIT_ID:0:7}
-            
-            # Update the image tag in the deployment YAML
-            sed -i "s|image: .*|image: $IMAGE_NAME:$SHORT_COMMIT_ID|g" $FRONTEND_DEPLOYMENT_FILE
+          cd ./NetflixInfra
+          FRONTEND_DEPLOYMENT_FILE=k8s/NetflixFrontend/netflix-frontend-deploy.yaml
+          IMAGE_NAME=guymeltzer/nf
+          COMMIT_ID=${{ github.sha }}
+          SHORT_COMMIT_ID=${COMMIT_ID:0:7}
+          
+          # Update the image tag in the deployment YAML
+          sed -i "s|image: .*|image: $IMAGE_NAME:$SHORT_COMMIT_ID|g" $FRONTEND_DEPLOYMENT_FILE
 
       - name: Commit and Push changes
         run: |
